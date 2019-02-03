@@ -30,6 +30,16 @@ def scrap(driver: webdriver, url: str):
     images = list()
 
     driver.get(url)
+    
+    # 게시글 내의 이미지가 1개일 경우를 위한 코드
+    # Code for case when number of images is only 1
+    soup = BeautifulSoup(driver.page_source, 'lxml')
+    img_tag = soup.select('#photoview')
+    image = reg.search(str(img_tag))
+    if bool(image):
+        images.append(str(image.group('img')))
+        return images
+    
     try:
         driver.switch_to.frame("cafe_main")
     except NoSuchFrameException:
