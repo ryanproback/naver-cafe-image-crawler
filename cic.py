@@ -78,13 +78,13 @@ def extract_file_name(url: str):
 # URL Address which image is located
 
 # dir_path : str
-# 이미지를 저장할 폴더의 주소 (끝에 반드시 /(슬래시)를 붙일 것)
-# directory path to save image (You have to attach /(slash) to end)
+# 이미지를 저장할 폴더의 주소
+# directory path to save image
 
 def download_image(url: str, dir_path: str):
     file_name = extract_file_name(url)
     url = quote(url.encode('utf8'), '/:')
-    request.urlretrieve(url, dir_path + file_name)
+    request.urlretrieve(url, os.path.join(dir_path, file_name))
 
     
 # 네이버 카페 게시글이 아닌 URL을 전달했을 경우 발생시킬 Exception
