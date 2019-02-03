@@ -1,5 +1,7 @@
 from selenium import webdriver
 from cic import scrap, download_image
+import os
+
 
 # --------------------- Test Case ------------------------
 
@@ -10,6 +12,7 @@ def case_scrap():
     url = 'https://cafe.naver.com/joonggonara/556661313'
     my_list = scrap(driver, url)
     print(my_list)
+    driver.close()
 
 
 # 이미지의 원본 주소를 스크랩하여 특정 폴더에 다운로드하는 테스트
@@ -19,9 +22,12 @@ def case_scrap_and_download():
     url = 'https://cafe.naver.com/joonggonara/556661313'
     my_list = scrap(driver, url)
     print(my_list)
+    if not os.path.exists('testdir'):
+        os.mkdir('testdir')
     for my_url in my_list:
         download_image(my_url, 'testdir/')
-        
-        
+    driver.close()
+
+
 if __name__ == "__main__":
-    case_scrap_and_download()        
+    case_scrap_and_download()
