@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchFrameException
 from bs4 import BeautifulSoup
 from urllib import request
 from urllib.parse import urlparse
@@ -29,7 +30,10 @@ def scrap(driver: webdriver, url: str):
     images = list()
 
     driver.get(url)
-    driver.switch_to.frame("cafe_main")
+    try:
+        driver.switch_to.frame("cafe_main")
+    except NoSuchFrameException:
+        raise InvalidURLException(url)
     soup = BeautifulSoup(driver.page_source, 'lxml')
 
     lines = soup.select('#attachLayer > ul > script')
@@ -71,3 +75,15 @@ def download_image(url: str, dir_path: str):
     file_name = extract_file_name(url)
     url = quote(url.encode('utf8'), '/:')
     request.urlretrieve(url, dir_path + file_name)
+
+    
+# 네이버 카페 게시글이 아닌 URL을 전달했을 경우 발생시킬 Exception
+# The exception to raise when user transfer URL which is not naver-cafe-article.
+class InvalidURLException(Exception):
+    # 생성할때 value 값을 입력 받는다.
+    def __init__(self, value):
+        self.value = value
+
+    # 생성할때 받은 value 값을 확인 한다.
+    def __str__(self):
+        return f'Message: May be, You inserted URL that is not cafe article ( Received URL: { self.value } )'
