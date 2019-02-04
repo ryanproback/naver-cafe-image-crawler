@@ -56,6 +56,51 @@ def scrap(driver: webdriver, url: str):
     return images
 
 
+# scrap_by_id
+# 게시글 내 이미지들의 원본 URL을 list로 묶어 반환합니다.
+# This function return list of original url of image in article
+
+# driver : webdriver
+# 셀레니엄 드라이버입니다.
+# This is Selenium driver
+
+# cafe_id : int
+# 카페의 아이디입니다.
+# ID of cafe
+
+# article_id : int
+# 게시글의 아이디입니다.
+# ID of article
+def scrap_by_id(driver: webdriver, cafe_id: int, article_id: int):
+    url = make_article_url_by_id(cafe_id, article_id)
+    images = list()
+
+    driver.get(url)
+
+    soup = BeautifulSoup(driver.page_source, 'lxml')
+    img_tag = soup.select('#photoview')
+    image = reg.search(str(img_tag))
+    if bool(image):
+        images.append(str(image.group('img')))
+        return images
+
+    try:
+        driver.switch_to.frame("cafe_main")
+    except NoSuchFrameException:
+        raise InvalidURLException(url)
+
+    soup = BeautifulSoup(driver.page_source, 'lxml')
+
+    lines = soup.select('#attachLayer > ul > script')
+
+    for line in lines:
+        m = reg.search(str(line))
+        if bool(m):
+            images.append(str(m.group('img')))
+
+    return images
+
+
 # extract_file_name
 # URL로 부터 파일의 이름을 추출하기 위한 함수 입니다.
 # The function to extract file name from url
