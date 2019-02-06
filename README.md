@@ -11,8 +11,9 @@ This is image crawler for Naver Cafe (네이버 카페 게시글 이미지 크�
 #### scrap을 통해 반환받은 이미지들을 다운받을 경우
 1. 반복문을 통해 한 주소 씩 함수를 호출 하도록 합니다.
 
+
 ## 사용 예
-'''python
+```python
 from cic import scrap, download_image
 from selenium import webdriver
 import os
@@ -34,7 +35,7 @@ def case_scrap_and_download():
 
 if __name__ == "__main__":
     case_scrap_and_download()
-'''
+```
 
 ## Dependencies
 - Windows
