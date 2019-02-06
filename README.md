@@ -12,6 +12,7 @@ This is image crawler for Naver Cafe (네이버 카페 게시글 이미지 크�
 1. 반복문을 통해 한 주소 씩 함수를 호출 하도록 합니다.
 
 ## Dependencies
+- Windows
 - python 3.6
 - selenium
 - bs4
