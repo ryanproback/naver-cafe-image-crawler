@@ -129,7 +129,10 @@ def extract_file_name(url: str):
 def download_image(url: str, dir_path: str):
     file_name = extract_file_name(url)
     url = quote(url.encode('utf8'), '/:')
-    request.urlretrieve(url, os.path.join(dir_path, file_name))
+    try:
+        request.urlretrieve(url, os.path.join(dir_path,file_name))
+    except HTTPError:
+        print('[e] Wrong Image URL. 이미지가 존재하지 않습니다.')
 
     
 # 네이버 카페 게시글이 아닌 URL을 전달했을 경우 발생시킬 Exception
@@ -142,3 +145,14 @@ class InvalidURLException(Exception):
     # 생성할때 받은 value 값을 확인 한다.
     def __str__(self):
         return f'Message: May be, You inserted URL that is not cafe article ( Received URL: { self.value } )'
+    
+    
+# 존재하지 않는 이미지 URL을 전달했을 경우 발생시킬 에러
+# The error to raise when user transfer invalid image URL to function.
+class NotFoundImage(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    # 생성할때 받은 value 값을 확인 한다.
+    def __str__(self):
+        return f'Message: Wrong Image URL. 이미지가 존재하지 않습니다. ( Received URL: { self.value } )'
